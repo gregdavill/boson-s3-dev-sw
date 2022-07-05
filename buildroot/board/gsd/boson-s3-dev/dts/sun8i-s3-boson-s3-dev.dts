@@ -95,6 +95,18 @@
 	};
 };
 
+&spi0 {
+	status = "okay";
+
+	flash@0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "winbond,w25q128", "jedec,spi-nor";
+		reg = <0>;
+		spi-max-frequency = <40000000>;
+	};
+};
+
 &emac {
 	phy-handle = <&int_mii_phy>;
 	phy-mode = "mii";
@@ -106,6 +118,23 @@
 	bus-width = <4>;
 	broken-cd;
 	status = "okay";
+};
+
+
+&mmc1 {
+	vmmc-supply = <&vcc_3v3>;
+	vqmmc-supply = <&vcc_3v3>;
+	mmc-pwrseq = <&wifi_pwrseq>;
+	bus-width = <4>;
+	non-removable;
+	no-1-8-v;
+	cap-sd-highspeed;
+	status = "okay";
+
+	brcmf: wifi@1 {
+		reg = <1>;
+		compatible = "brcm,bcm4329-fmac";
+	};
 };
 
 &pio {
@@ -121,9 +150,43 @@
 	pinctrl-0 = <&uart0_pb_pins>;
 };
 
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pins>;
+	uart-has-rtscts;
+
+	bluetooth {
+		compatible = "brcm,bcm4345c5";
+		clocks = <&rtc 1>;
+		clock-names = "lpo";
+		device-wakeup-gpios = <&pio 2 4 GPIO_ACTIVE_HIGH>; /* PC4 */
+		host-wakeup-gpios = <&pio 6 8 GPIO_ACTIVE_HIGH>; /* PG8 */
+		max-speed = <1500000>;
+		shutdown-gpios = <&pio 2 5 GPIO_ACTIVE_HIGH>; /* PC5 */
+		vbat-supply = <&vcc_3v3>;
+		vddio-supply = <&vcc_3v3>;
+	};
+};
+
 &pio {
 	uart0_pb_pins: uart0-pb-pins {
 		pins = "PB8", "PB9";
 		function = "uart0";
 	};
+
+	uart2_pins: uart2-pins {
+		/* TX, RX, RTS, CTS */
+		pins = "PB0", "PB1", "PB2", "PB3";
+		function = "uart2";
+	};
+};
+
+&usb_otg {
+	dr_mode = "host";
+	status = "okay";
+};
+
+&usbphy {
+	status = "okay";
 };
