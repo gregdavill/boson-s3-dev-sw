@@ -79,15 +79,6 @@
 		vin-supply = <&vcc_3v3>;
 	};
 
-	vcc_3v0a: vcc-3v0a {
-		compatible = "regulator-fixed";
-		regulator-always-on;
-		regulator-name = "vcc-3v0a";
-		regulator-min-microvolt = <3000000>;
-		regulator-max-microvolt = <3000000>;
-		vin-supply = <&vcc_3v3>;
-	};
-
 	wifi_pwrseq: wifi_pwrseq {
 		compatible = "mmc-pwrseq-simple";
 		reset-gpios = <&pio 2 5 GPIO_ACTIVE_LOW>; /* PC05 WL-PMU-EN */
@@ -120,7 +111,6 @@
 	status = "okay";
 };
 
-
 &mmc1 {
 	vmmc-supply = <&vcc_3v3>;
 	vqmmc-supply = <&vcc_3v3>;
@@ -129,6 +119,7 @@
 	non-removable;
 	no-1-8-v;
 	cap-sd-highspeed;
+//	max-frequency = <10000000>;
 	status = "okay";
 
 	brcmf: wifi@1 {
@@ -141,6 +132,8 @@
 	vcc-pb-supply = <&vcc_3v3>;
 	vcc-pd-supply = <&vcc_3v3>;
 	vcc-pe-supply = <&vcc_3v3>;
+	vcc-pf-supply = <&vcc_3v3>;
+	vcc-pg-supply = <&vcc_3v3>;
 };
 
 &uart0 {
@@ -163,7 +156,7 @@
 		device-wakeup-gpios = <&pio 2 4 GPIO_ACTIVE_HIGH>; /* PC4 */
 		host-wakeup-gpios = <&pio 6 8 GPIO_ACTIVE_HIGH>; /* PG8 */
 		max-speed = <1500000>;
-		shutdown-gpios = <&pio 2 5 GPIO_ACTIVE_HIGH>; /* PC5 */
+		//shutdown-gpios = <&pio 2 7 GPIO_ACTIVE_HIGH>; /* PC5 */
 		vbat-supply = <&vcc_3v3>;
 		vddio-supply = <&vcc_3v3>;
 	};
@@ -185,8 +178,10 @@
 &usb_otg {
 	dr_mode = "host";
 	status = "okay";
+	vcc-supply = <&vcc_3v3>;
 };
 
 &usbphy {
 	status = "okay";
+	vcc-supply = <&vcc_3v3>;
 };

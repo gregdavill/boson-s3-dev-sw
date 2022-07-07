@@ -1,3 +1,8 @@
 #!/bin/sh
 
-/sbin/modprobe brcmfmac
+# cp /lib/firmware/brcm/brcmfmac43430a0-sdio.bin  /lib/firmware/brcm/brcmfmac43430-sdio.gsd,gsd-boson-dev.bin
+# cp /lib/firmware/brcm/brcmfmac43430-sdio.MUR1DX.txt  /lib/firmware/brcm/brcmfmac43430-sdio.gsd,gsd-boson-dev.txt
+# /sbin/modprobe brcmfmac
+
+cp /lib/firmware/brcm/BCM43430A1.hcd /lib/firmware/brcm/BCM.hcd
+cp /lib/firmware/brcm/BCM43430A1.hcd /lib/firmware/brcm/BCM43430.hcd 
