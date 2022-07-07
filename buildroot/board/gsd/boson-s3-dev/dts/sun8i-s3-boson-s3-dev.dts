@@ -196,3 +196,11 @@
 	status = "okay";
 	vcc-supply = <&vcc_3v3>;
 };
+
+&ehci0 {
+	status = "okay";
+};
+
+&ohci0 {
+	status = "okay";
+};

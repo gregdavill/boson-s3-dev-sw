@@ -4,5 +4,9 @@
 # cp /lib/firmware/brcm/brcmfmac43430-sdio.MUR1DX.txt  /lib/firmware/brcm/brcmfmac43430-sdio.gsd,gsd-boson-dev.txt
 # /sbin/modprobe brcmfmac
 
-cp /lib/firmware/brcm/BCM43430A1.hcd /lib/firmware/brcm/BCM.hcd
-cp /lib/firmware/brcm/BCM43430A1.hcd /lib/firmware/brcm/BCM43430.hcd 
+# cp /lib/firmware/brcm/BCM43430A1.hcd /lib/firmware/brcm/BCM.hcd
+# cp /lib/firmware/brcm/BCM43430A1.hcd /lib/firmware/brcm/BCM43430.hcd 
+
+echo 1 > /sys/class/leds/boson:en/brightness 
+echo 1 > /sys/class/leds/boson:rst/brightness
+modprobe uvcvideo
