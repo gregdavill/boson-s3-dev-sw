@@ -1,0 +1,8 @@
+[Unit]
+Description=LED Toggle service
+
+[Service]
+ExecStart=/usr/sbin/led_off.sh
+
+[Install]
+WantedBy=multi-user.target
