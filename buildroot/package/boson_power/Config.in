@@ -1,0 +1,4 @@
+config BR2_PACKAGE_BOSON_POWER
+       bool "Boson Power"
+       help
+         Boson Power Service

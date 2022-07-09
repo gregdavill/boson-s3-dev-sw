@@ -1,0 +1,13 @@
+[Unit]
+Description=Boson Power Ctrl
+DefaultDependencies=no
+
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/sh -c "echo 1 > /sys/class/leds/boson:en/brightness; echo 1 > /sys/class/leds/boson:rst/brightness"
+ExecStop=/usr/bin/sh -c "echo 0 > /sys/class/leds/boson:en/brightness; echo 0 > /sys/class/leds/boson:rst/brightness"
+
+[Install]
+WantedBy=sysinit.target

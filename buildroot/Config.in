@@ -1,0 +1,2 @@
+source "$BR2_EXTERNAL_BOSONS3DEV_PATH/package/bluetooth_en/Config.in"
+source "$BR2_EXTERNAL_BOSONS3DEV_PATH/package/boson_power/Config.in"
