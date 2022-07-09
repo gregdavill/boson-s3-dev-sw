@@ -1,7 +1,7 @@
 From d370419b9507463fa09d67d927cdf23719bc2a29 Mon Sep 17 00:00:00 2001
 From: Greg Davill <greg.davill@gmail.com>
 Date: Tue, 5 Jul 2022 23:28:59 +0930
-Subject: [PATCH] Initial support for boson-dev
+Subject: [PATCH 1/2] Initial support for boson-dev
 
 ---
  arch/arm/dts/Makefile                   |   1 +

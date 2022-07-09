@@ -1,0 +1,125 @@
+From 6549911e0b0cdeb010598315db3f2d9e8196fb17 Mon Sep 17 00:00:00 2001
+From: Greg Davill <greg.davill@gmail.com>
+Date: Sat, 9 Jul 2022 14:25:36 +0930
+Subject: [PATCH 2/2] sunxi: v3s: ethernet support
+
+Add support for the emac/ephy in mii mode on the V3S
+---
+ arch/arm/dts/sun8i-s3-gsd-boson-dev.dts | 1 +
+ configs/gsd-boson-dev_defconfig         | 8 +++++---
+ drivers/clk/sunxi/clk_v3s.c             | 6 ++++++
+ drivers/net/sun8i_emac.c                | 7 ++++++-
+ 4 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/dts/sun8i-s3-gsd-boson-dev.dts b/arch/arm/dts/sun8i-s3-gsd-boson-dev.dts
+index 5e7db7ad1a..8c40e396e0 100644
+--- a/arch/arm/dts/sun8i-s3-gsd-boson-dev.dts
++++ b/arch/arm/dts/sun8i-s3-gsd-boson-dev.dts
+@@ -14,6 +14,7 @@
+ 
+ 	aliases {
+ 		serial0 = &uart0;
++		ethernet0 = &emac;
+ 	};
+ 
+ 	chosen {
+diff --git a/configs/gsd-boson-dev_defconfig b/configs/gsd-boson-dev_defconfig
+index aafddcad6d..6e758c0bff 100644
+--- a/configs/gsd-boson-dev_defconfig
++++ b/configs/gsd-boson-dev_defconfig
+@@ -1,13 +1,15 @@
+ CONFIG_ARM=y
+ CONFIG_ARCH_SUNXI=y
++CONFIG_DEFAULT_DEVICE_TREE="sun8i-s3-gsd-boson-dev"
+ CONFIG_SPL=y
+ CONFIG_MACH_SUN8I_V3S=y
+ CONFIG_SUNXI_DRAM_DDR3_1333=y
+ CONFIG_DRAM_CLK=504
+ CONFIG_DRAM_ODT_EN=y
+-CONFIG_DEFAULT_DEVICE_TREE="sun8i-s3-gsd-boson-dev"
+ CONFIG_LED=y
+ CONFIG_LED_BLINK=y
+ CONFIG_LED_GPIO=y
+-# CONFIG_NETDEVICES is not set
+-CONFIG_CONS_INDEX=1
+\ No newline at end of file
++CONFIG_DM_MDIO=y
++CONFIG_DM_MDIO_MUX=y
++CONFIG_DM_ETH_PHY=y
++CONFIG_SUN8I_EMAC=y
+diff --git a/drivers/clk/sunxi/clk_v3s.c b/drivers/clk/sunxi/clk_v3s.c
+index cce5c658ca..8df1e6755b 100644
+--- a/drivers/clk/sunxi/clk_v3s.c
++++ b/drivers/clk/sunxi/clk_v3s.c
+@@ -17,6 +17,7 @@ static struct ccu_clk_gate v3s_gates[] = {
+ 	[CLK_BUS_MMC0]		= GATE(0x060, BIT(8)),
+ 	[CLK_BUS_MMC1]		= GATE(0x060, BIT(9)),
+ 	[CLK_BUS_MMC2]		= GATE(0x060, BIT(10)),
++	[CLK_BUS_EMAC]		= GATE(0x060, BIT(17)),
+ 	[CLK_BUS_SPI0]		= GATE(0x060, BIT(20)),
+ 	[CLK_BUS_OTG]		= GATE(0x060, BIT(24)),
+ 
+@@ -26,6 +27,8 @@ static struct ccu_clk_gate v3s_gates[] = {
+ 	[CLK_BUS_UART1]		= GATE(0x06c, BIT(17)),
+ 	[CLK_BUS_UART2]		= GATE(0x06c, BIT(18)),
+ 
++	[CLK_BUS_EPHY]		= GATE(0x070, BIT(0)),
++
+ 	[CLK_SPI0]		= GATE(0x0a0, BIT(31)),
+ 
+ 	[CLK_USB_PHY0]          = GATE(0x0cc, BIT(8)),
+@@ -37,9 +40,12 @@ static struct ccu_reset v3s_resets[] = {
+ 	[RST_BUS_MMC0]		= RESET(0x2c0, BIT(8)),
+ 	[RST_BUS_MMC1]		= RESET(0x2c0, BIT(9)),
+ 	[RST_BUS_MMC2]		= RESET(0x2c0, BIT(10)),
++	[RST_BUS_EMAC]		= RESET(0x2c0, BIT(17)),
+ 	[RST_BUS_SPI0]		= RESET(0x2c0, BIT(20)),
+ 	[RST_BUS_OTG]		= RESET(0x2c0, BIT(24)),
+ 
++	[RST_BUS_EPHY]		= RESET(0x2c8, BIT(2)),
++
+ 	[RST_BUS_I2C0]		= RESET(0x2d8, BIT(0)),
+ 	[RST_BUS_I2C1]		= RESET(0x2d8, BIT(1)),
+ 	[RST_BUS_UART0]		= RESET(0x2d8, BIT(16)),
+diff --git a/drivers/net/sun8i_emac.c b/drivers/net/sun8i_emac.c
+index 2e24d12214..eac5edd122 100644
+--- a/drivers/net/sun8i_emac.c
++++ b/drivers/net/sun8i_emac.c
+@@ -139,6 +139,7 @@ DECLARE_GLOBAL_DATA_PTR;
+ enum emac_variant {
+ 	A83T_EMAC = 1,
+ 	H3_EMAC,
++	V3S_EMAC,
+ 	A64_EMAC,
+ 	R40_GMAC,
+ 	H6_EMAC,
+@@ -567,6 +568,8 @@ static int parse_phy_pins(struct udevice *dev)
+ 		iomux = SUN8I_IOMUX;
+ 	else if (IS_ENABLED(CONFIG_MACH_SUN50I))
+ 		iomux = SUN8I_IOMUX;
++	else if (IS_ENABLED(CONFIG_MACH_SUN8I_V3S))
++		iomux = SUN8I_IOMUX;
+ 	else
+ 		BUILD_BUG_ON_MSG(1, "missing pinmux value for Ethernet pins");
+ 
+@@ -957,7 +960,7 @@ static int sun8i_emac_eth_of_to_plat(struct udevice *dev)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (priv->variant == H3_EMAC) {
++	if (priv->variant == H3_EMAC || priv->variant == V3S_EMAC) {
+ 		ret = sun8i_handle_internal_phy(dev, priv);
+ 		if (ret)
+ 			return ret;
+@@ -1002,6 +1005,8 @@ static int sun8i_emac_eth_of_to_plat(struct udevice *dev)
+ 
+ static const struct udevice_id sun8i_emac_eth_ids[] = {
+ 	{.compatible = "allwinner,sun8i-h3-emac", .data = (uintptr_t)H3_EMAC },
++	{ .compatible = "allwinner,sun8i-v3s-emac",
++		.data = (uintptr_t)V3S_EMAC },
+ 	{.compatible = "allwinner,sun50i-a64-emac",
+ 		.data = (uintptr_t)A64_EMAC },
+ 	{.compatible = "allwinner,sun8i-a83t-emac",
+-- 
+2.30.2
+
