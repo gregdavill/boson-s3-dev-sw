@@ -1,0 +1,4 @@
+config BR2_PACKAGE_CEDAR_AUTOSTART
+       bool "Cedar Autostart"
+       help
+         Load Cedar Kernel Module

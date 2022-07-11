@@ -1,0 +1,13 @@
+[Unit]
+Description=Cedar Load Kernel Module
+DefaultDependencies=no
+
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/sh -c "modprobe -q cedar_ve"
+ExecStop=/usr/bin/sh -c "modprobe -q -r cedar_ve"
+
+[Install]
+WantedBy=sysinit.target
