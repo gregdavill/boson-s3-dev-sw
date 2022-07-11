@@ -1,1 +1,1 @@
-UBOOT_OVERRIDE_SRCDIR = ../u-boot/
+BR2_GLOBAL_PATCH_DIR=../package_patches
