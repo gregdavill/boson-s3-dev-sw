@@ -4,14 +4,17 @@ setenv kernel_loadaddr 0x41100000
 led led:usr on
 led led:pwr on
 
+# Initialize i2c bus 1
+# i2c dev 0
+
 # Default to Boson S3 Dev
 setenv fdtfile sun8i-s3-boson-s3-dev.dtb
 
-#setexpr rootpart ${distro_bootpart} + 1 || rootpart=4
-#part uuid ${devtype} ${devnum}:${rootpart} rootuuid
-#setenv bootargs initcall_debug root=PARTUUID=${rootuuid} ro rootwait earlycon 
-#load ${devtype} ${devnum}:${distro_bootpart} ${kernel_loadaddr} zImage
-#load ${devtype} ${devnum}:${distro_bootpart} ${dtb_loadaddr} ${fdtfile}
+setexpr rootpart ${distro_bootpart} + 1 || rootpart=4
+part uuid ${devtype} ${devnum}:${rootpart} rootuuid
+setenv bootargs initcall_debug root=PARTUUID=${rootuuid} ro rootwait earlycon
+load ${devtype} ${devnum}:${distro_bootpart} ${kernel_loadaddr} zImage
+load ${devtype} ${devnum}:${distro_bootpart} ${dtb_loadaddr} ${fdtfile}
 
 # Check for a MAC address extracted from efuse
 if test -n ${ethaddr}; then
@@ -25,10 +28,4 @@ if test -n ${ethaddr}; then
 	fdt set /soc/ethernet@1c30000 local-mac-address ${ethaddr_components}
 fi
 
-setenv nfsfile zImage
-setenv rootpath /rootfs
-#setenv ipaddr 192.168.10.60
-#setenv serverip 192.168.10.4
-setenv nfsargs 'setenv bootargs root=/dev/nfs rw nfsroot=${serverip}:${rootpath},proto=tcp,vers=4 ip=:::::eth0:dhcp earlycon systemd.mask=systemd-networkd.service'
-setenv nfsboot 'dhcp ${kernel_loadaddr} ${nfsfile};dhcp ${dtb_loadaddr} ${fdtfile};run nfsargs;bootz ${kernel_loadaddr} - ${dtb_loadaddr}'
-run nfsboot
+bootz ${kernel_loadaddr} - ${dtb_loadaddr}
