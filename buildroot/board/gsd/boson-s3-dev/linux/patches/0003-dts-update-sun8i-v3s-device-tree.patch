@@ -1,0 +1,71 @@
+From 1269fe971c19f5596d1dae867eece24071f50f60 Mon Sep 17 00:00:00 2001
+From: Greg Davill <greg.davill@gmail.com>
+Date: Mon, 11 Jul 2022 15:44:09 +0930
+Subject: [PATCH 3/3] dts: update sun8i-v3s device tree
+
+---
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 32 +++++++++++++++++++++++---------
+ 1 file changed, 23 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index 9bc6f6d7205c..f5d33c91c940 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -114,6 +114,21 @@ osc32k: osc32k_clk {
+ 		};
+ 	};
+ 
++	reserved-memory {
++            #address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++
++			cma_pool: default-pool {
++				alloc-ranges = <0x40000000 0x8000000>;
++				compatible = "shared-dma-pool";
++				linux,cma-default;
++				reusable;
++				alignment = <0x2000>;
++				size = <0x4000000>; /* 32MB */
++			};
++	};
++
+ 	soc {
+ 		compatible = "simple-bus";
+ 		#address-cells = <1>;
+@@ -155,24 +170,23 @@ mixer0_out_tcon0: endpoint {
+ 			};
+ 		};
+ 
+-		syscon: system-control@1c00000 {
+-			compatible = "allwinner,sun8i-h3-system-control","syscon";
+-			reg = <0x01c00000 0x1000>;
++		syscon: syscon@1c00000 {
++			compatible = "allwinner,sun8i-v3s-system-controller", "allwinner,sun8i-h3-system-control", "syscon";
++			reg = <0x01c00000 0xd0>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			ranges;
+ 
+-			sram_c: sram@1d00000 {
++			sram_c: sram@4000 {
+ 				compatible = "mmio-sram";
+-				reg = <0x01d00000 0x80000>;
++				reg = <0x00004000 0xa000>;
+ 				#address-cells = <1>;
+ 				#size-cells = <1>;
+-				ranges = <0 0x01d00000 0x80000>;
++				ranges = <0 0x00004000 0xa000>;
+ 
+ 				ve_sram: sram-section@0 {
+-					compatible = "allwinner,sun8i-h3-sram-c1",
+-					 "allwinner,sun4i-a10-sram-c1";
+-					reg = <0x000000 0x80000>;
++					compatible = "allwinner,sun8i-v3s-sram-c", "allwinner,sun4i-a10-sram-c1";
++					reg = <0x000000 0xa000>;
+ 				};
+ 			};
+ 		};
+-- 
+2.30.2
+
