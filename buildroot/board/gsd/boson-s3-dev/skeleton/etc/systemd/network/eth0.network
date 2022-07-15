@@ -1,0 +1,5 @@
+[Match]
+Name=eth0
+[Network]
+Address=169.254.1.2/16
+LinkLocalAddressing=no
