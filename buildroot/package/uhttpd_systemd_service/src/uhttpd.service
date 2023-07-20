@@ -1,0 +1,11 @@
+[Unit]
+Description=The uhttpd HTTP server
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+ExecStart=echo 1 > /sys/class/leds/led:usr/brightness
+ExecStop=echo 0 > /sys/class/leds/led:usr/brightness
+
+[Install]
+WantedBy=multi-user.target
