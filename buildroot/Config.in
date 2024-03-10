@@ -1,6 +1,7 @@
 source "$BR2_EXTERNAL_BOSONS3DEV_PATH/package/boson_power/Config.in"
 source "$BR2_EXTERNAL_BOSONS3DEV_PATH/package/libuvc/Config.in"
 source "$BR2_EXTERNAL_BOSONS3DEV_PATH/package/rtsp_server/Config.in"
+source "$BR2_EXTERNAL_BOSONS3DEV_PATH/package/rtsp_server_autostart/Config.in"
 source "$BR2_EXTERNAL_BOSONS3DEV_PATH/package/cedar/Config.in"
 source "$BR2_EXTERNAL_BOSONS3DEV_PATH/package/cedar-autostart/Config.in"
 source "$BR2_EXTERNAL_BOSONS3DEV_PATH/package/ifplugd_systemd_service/Config.in"
