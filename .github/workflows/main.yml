@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sdcard.img.gz
-          path: $(realpath "$GITHUB_WORKSPACE"/../buildroot-2022.05/output/images/sdcard.img.gz)
+          path: /home/runner/work/boson-s3-dev-sw/buildroot-2022.05/output/images/sdcard.img.gz
 
   release:
     runs-on: ubuntu-latest
