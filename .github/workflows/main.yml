@@ -18,6 +18,14 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v2
 
+      - name: retrieve ccache
+        uses: actions/cache@v2
+        with:
+          path: ~/.buildroot-ccache
+          key: ccache-${{ github.sha }}
+          restore-keys: |
+            ccache-
+
       - name: Prepare and run build
         run: |
           cd "$(realpath "$GITHUB_WORKSPACE")"
