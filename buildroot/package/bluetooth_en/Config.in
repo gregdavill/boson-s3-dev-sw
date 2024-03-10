@@ -1,4 +1,0 @@
-config BR2_PACKAGE_BLUETOOTH_EN
-	bool "bluetooth-en"
-	help
-	  Add /var/lib/bluetoth dir needed 
