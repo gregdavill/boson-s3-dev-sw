@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: retrieve ccache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.buildroot-ccache
           key: ccache-${{ github.sha }}
