@@ -164,7 +164,7 @@ hlsTrustedProxies: []
 # The settings under the path "all" are applied to all paths that do not match
 # another entry.
 paths:
-  all:
+  stream:
     # Source of the stream. This can be:
     # * publisher -> the stream is published by a RTSP or RTMP client
     # * rtsp://existing-url -> the stream is pulled from another RTSP server / camera
@@ -251,9 +251,9 @@ paths:
     # * RTSP_PORT: server port
     # * G1, G2, ...: regular expression groups, if path name is
     #   a regular expression.
-    runOnDemand:
+    runOnDemand: ffmpeg -f v4l2 -pix_fmt nv12 -framerate 30 -video_size 640x512 -i /dev/video0 -c:v cedrus264 -b:v 4M -f rtsp rtsp://localhost:8554/stream
     # Restart the command if it exits suddenly.
-    runOnDemandRestart: no
+    runOnDemandRestart: yes
     # Readers will be put on hold until the runOnDemand command starts publishing
     # or until this amount of time has passed.
     runOnDemandStartTimeout: 10s
