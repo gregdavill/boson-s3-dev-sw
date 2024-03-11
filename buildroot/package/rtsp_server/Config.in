@@ -1,5 +1,0 @@
-config BR2_PACKAGE_RTSP_SERVER
-	bool "rtsp_server"
-	help
-	  rtsp_server
-

@@ -1,0 +1,9 @@
+config BR2_PACKAGE_MEDIAMTX
+	bool "mediamtx"
+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+	help
+	  MediaMTX (formerly rtsp-simple-server) is a ready-to-use and 
+	  zero-dependency real-time media server and media proxy that 
+	  allows to publish, read, proxy, record and playback video and 
+	  audio streams.
+
