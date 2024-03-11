@@ -1,4 +1,4 @@
-config BR2_PACKAGE_RTSP_SERVER_AUTOSTART
-       bool "rtsp_server Autostart"
+config BR2_PACKAGE_MEDIAMTX_AUTOSTART
+       bool "MEDIAMTX autostart service"
        help
-         Autorun rtsp_server
+         Install service for mediamtx
